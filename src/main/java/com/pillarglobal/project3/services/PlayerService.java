@@ -1,10 +1,12 @@
 package com.pillarglobal.project3.services;
 
 import com.pillarglobal.project3.models.Player;
-import com.pillarglobal.project3.repositories.PlayerRepository;
+import com.pillarglobal.project3.repositories.PlayersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Service
@@ -12,47 +14,32 @@ public class PlayerService {
 
 
     @Autowired
-    private PlayerRepository playerRepository;
+    private PlayersRepository playersRepository;
 
     public boolean playerExists(int id) {
-        return playerRepository.existPlayer(id);
+        return playersRepository.existsById(id);
     }
 
     public Player getPlayer(int id) {
-        for(Player p:playerRepository.getSet()){
-            if(p.getId()==id)
-                return p;
-        }
-        return null;
+        return (Player) playersRepository.findById(id).get();
+
     }
 
     public Set<Player> getPlayers() {
-        return playerRepository.getSet();
+        return new LinkedHashSet<>(playersRepository.findAll());
     }
 
     public void addPlayer(Player player) {
-        playerRepository.addPlayer(player);
+        playersRepository.save(player);
 
     }
 
     public void update(Player player) {
-        for(Player p:playerRepository.getSet()){
-            if(player.getId()==p.getId()) {
-                playerRepository.removePlayer(p);
-                playerRepository.addPlayer(player);
-            }
-        }
+        playersRepository.save(player);
     }
 
     public void delete(int id) {
+        playersRepository.deleteById(id);
 
-        Set<Player> set = playerRepository.getSet();
-        for(Player p: set){
-
-            if(p.getId()==id){
-
-                playerRepository.removePlayer(p);
-            }
-        }
     }
 }

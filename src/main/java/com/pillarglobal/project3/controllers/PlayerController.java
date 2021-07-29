@@ -19,7 +19,6 @@ public class PlayerController {
             return new ResponseEntity<>(playerService.getPlayer(id), HttpStatus.OK);
         } else
             return new ResponseEntity<>("Player " + id + " does not exist", HttpStatus.NOT_FOUND);
-
     }
 
     @GetMapping("/getPlayers")
